@@ -1,0 +1,8 @@
+This delphi program is used to create multilayer artificial neural networks by combining visual elements.
+
+A network is trained by backpropagation. Application is composed of 2 tabs, "Model" and "Train".
+"Model" tab is used to create a network out of various types of neurons, and set up connections among them."Train" is used to, well, train the network, and test it on a simple logical function AND.
+
+It's university project, practising OOP. Menus and UI are in russian language.
+It is a work in progress, bugs are to be expected, tests are virtually nonexistent.
+Compiled on Delphi XE8.
