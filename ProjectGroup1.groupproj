@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{70924FDE-F90C-4C56-9C1F-AB24FF4E8DBE}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="NeuralNetwork.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="unitTests\UnitTestingProject.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="NeuralNetwork">
+        <MSBuild Projects="NeuralNetwork.dproj"/>
+    </Target>
+    <Target Name="NeuralNetwork:Clean">
+        <MSBuild Projects="NeuralNetwork.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="NeuralNetwork:Make">
+        <MSBuild Projects="NeuralNetwork.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="UnitTestingProject">
+        <MSBuild Projects="unitTests\UnitTestingProject.dproj"/>
+    </Target>
+    <Target Name="UnitTestingProject:Clean">
+        <MSBuild Projects="unitTests\UnitTestingProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="UnitTestingProject:Make">
+        <MSBuild Projects="unitTests\UnitTestingProject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="NeuralNetwork;UnitTestingProject"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="NeuralNetwork:Clean;UnitTestingProject:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="NeuralNetwork:Make;UnitTestingProject:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
