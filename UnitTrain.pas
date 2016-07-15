@@ -154,7 +154,7 @@ begin
   queue.Free;
 end;
 
-function checkDependentNeuronsAndAddThem(): Boolean;
+function addDependentNeurons(): Boolean;
 var
   i, j: Integer;
 begin
@@ -201,7 +201,7 @@ begin
         thisNeuron.outputValue := thisNeuron.Activate(weightedSum);
         thisNeuron.isCalculated := true;
       end;
-  until checkDependentNeuronsAndAddThem() = false;
+  until addDependentNeurons() = false;
 end;
 
 // For second and further training passes
