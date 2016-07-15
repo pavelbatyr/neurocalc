@@ -191,12 +191,9 @@ begin
   for i := 0 to neuronUnitsCount - 1 do
     if neurons[i] is TOutNeuron then
       bfs(neurons[i] as TOutNeuron);
-  haveNeuronsToActivate := true;
-  while haveNeuronsToActivate = true do
-  begin
+  repeat
   // calculate all not yet calculated neurons
     for i := 0 to activOrderIndex - 1 do
-    begin
       if neurons[neuronsActivationOrder[i]].isCalculated = false then
       begin
         thisNeuron := neurons[neuronsActivationOrder[i]];
@@ -204,9 +201,7 @@ begin
         thisNeuron.outputValue := thisNeuron.Activate(weightedSum);
         thisNeuron.isCalculated := true;
       end;
-    end;
-    haveNeuronsToActivate := checkDependentNeuronsAndAddThem();
-  end;
+  until checkDependentNeuronsAndAddThem() = false;
 end;
 
 // For second and further training passes
