@@ -117,8 +117,8 @@ begin
     readln(f);
     for i := 0 to conCount - 1 do
     begin
-      readln(f, connections[i].n1);
-      readln(f, connections[i].n2);
+      readln(f, connections[i]._from);
+      readln(f, connections[i]._to);
     end;
     modelSetUp();
     btnToModel.Font.Style := [fsBold];
@@ -159,8 +159,8 @@ begin
       Writeln(f);
       for i := 0 to conCount - 1 do
       begin
-        Writeln(f, connections[i].n1);
-        Writeln(f, connections[i].n2);
+        Writeln(f, connections[i]._from);
+        Writeln(f, connections[i]._to);
       end;
     finally
       CloseFile(f);

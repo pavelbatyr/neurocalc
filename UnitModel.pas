@@ -320,7 +320,7 @@ begin
       while (k < conCount) do
       begin
           // if vertex removed is a beginning or an ending of a connection
-        if (connections[k].n1 = i) or (connections[k].n2 = i) then
+        if (connections[k]._from = i) or (connections[k]._to = i) then
         begin
           for l := k to conCount - 2 do
             connections[l] := connections[l + 1];
@@ -337,10 +337,10 @@ begin
         begin
             // If a connection exists that contains the removed vertex,
             // then update numbers of vertices of this connection.
-          if (connections[k].n1 = j + 1) then
-            Dec(connections[k].n1);
-          if (connections[k].n2 = j + 1) then
-            Dec(connections[k].n2);
+          if (connections[k]._from = j + 1) then
+            Dec(connections[k]._from);
+          if (connections[k]._to = j + 1) then
+            Dec(connections[k]._to);
         end;
       end;
       Dec(neuronUnitsCount);
@@ -547,16 +547,16 @@ begin
           TOutNeuron) then
         // establish a connection from the first neuron
         begin
-          connections[conCount].n1 := currentIndex;
+          connections[conCount]._from := currentIndex;
           firstConIsSet := true;
         end
         else if (firstConIsSet = true) and ((neurons[i] is
           TNeuron) or (neurons[i] is TOutNeuron)) then
         // establish a connection to the second neuron
         begin
-          connections[conCount].n2 := i;
+          connections[conCount]._to := i;
 
-          neurons[connections[conCount].n1].hasConnections := true;
+          neurons[connections[conCount]._from].hasConnections := true;
           neurons[i].hasConnections := true;
 
           inc(conCount);
@@ -647,34 +647,34 @@ begin
   for j := 0 to conCount - 1 do
   begin
     PBox.Canvas.Pen.Color := RGB(48, 48, 54);
-    if (neurons[connections[j].n1] is TNeuron) or (neurons[connections
-      [j].n1] is TOutNeuron) then
+    if (neurons[connections[j]._from] is TNeuron) or (neurons[connections
+      [j]._from] is TOutNeuron) then
     begin
-      x1 := neurons[connections[j].n1].visx + zoomedNeuronSize div 2;
-      y1 := neurons[connections[j].n1].visy + zoomedNeuronSize div 2;
-      x2 := neurons[connections[j].n2].visx + zoomedNeuronSize div 2;
-      y2 := neurons[connections[j].n2].visy + zoomedNeuronSize div 2;
+      x1 := neurons[connections[j]._from].visx + zoomedNeuronSize div 2;
+      y1 := neurons[connections[j]._from].visy + zoomedNeuronSize div 2;
+      x2 := neurons[connections[j]._to].visx + zoomedNeuronSize div 2;
+      y2 := neurons[connections[j]._to].visy + zoomedNeuronSize div 2;
       PBox.Canvas.MoveTo(x1, y1);
       PBox.Canvas.LineTo(x2, y2);
     end
-    else if (neurons[connections[j].n1] is TBiasNeuron) then
+    else if (neurons[connections[j]._from] is TBiasNeuron) then
     begin
       PBox.Canvas.Pen.Color := RGB(140, 140, 140);
-      x1 := neurons[connections[j].n1].visx + zoomedNeuronSize div 2;
-      y1 := neurons[connections[j].n1].visy + zoomedNeuronSize div 2;
-      x2 := neurons[connections[j].n2].visx + zoomedNeuronSize div 2;
-      y2 := neurons[connections[j].n2].visy + zoomedNeuronSize div 2;
+      x1 := neurons[connections[j]._from].visx + zoomedNeuronSize div 2;
+      y1 := neurons[connections[j]._from].visy + zoomedNeuronSize div 2;
+      x2 := neurons[connections[j]._to].visx + zoomedNeuronSize div 2;
+      y2 := neurons[connections[j]._to].visy + zoomedNeuronSize div 2;
       PBox.Canvas.MoveTo(x1, y1);
       PBox.Canvas.LineTo(x2, y2);
     end
     else // neurons[j] is input neuron
     begin
-      x1 := neurons[connections[j].n1].visx + zoomedInpNeuronSize
+      x1 := neurons[connections[j]._from].visx + zoomedInpNeuronSize
         div 2;
-      y1 := neurons[connections[j].n1].visy + zoomedInpNeuronSize
+      y1 := neurons[connections[j]._from].visy + zoomedInpNeuronSize
         div 2;
-      x2 := neurons[connections[j].n2].visx + zoomedNeuronSize div 2;
-      y2 := neurons[connections[j].n2].visy + zoomedNeuronSize div 2;
+      x2 := neurons[connections[j]._to].visx + zoomedNeuronSize div 2;
+      y2 := neurons[connections[j]._to].visy + zoomedNeuronSize div 2;
       PBox.Canvas.MoveTo(x1, y1);
       PBox.Canvas.LineTo(x2, y2);
     end;
@@ -682,7 +682,7 @@ begin
   // painting arrows
     PBox.Canvas.Brush.Color := RGB(48, 48, 54);
     PBox.Canvas.Pen.Color := RGB(48, 48, 54);
-    if (neurons[connections[j].n1] is TBiasNeuron) then
+    if (neurons[connections[j]._from] is TBiasNeuron) then
     begin
       PBox.Canvas.Brush.Color := RGB(140, 140, 140);
       PBox.Canvas.Pen.Color := RGB(140, 140, 140);

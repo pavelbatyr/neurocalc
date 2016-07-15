@@ -39,7 +39,7 @@ type
   end;
 
   TConnection = record
-    n1, n2: Integer;
+    _from, _to: Integer;
     weight: Double;
     nabla: Double;
   end;
@@ -74,17 +74,17 @@ begin
   // that they have already been calculated
     for i := 0 to conCount - 1 do
     begin
-      if self.index = connections[i].n2 then
+      if self.index = connections[i]._to then
         if bfs = false then
         begin
           // important neurons of previous layer are of TNeuron type
-          if (neurons[connections[i].n1].isImportant = true) and
-            (neurons[connections[i].n1].isCalculated = false) then
+          if (neurons[connections[i]._from].isImportant = true) and
+            (neurons[connections[i]._from].isCalculated = false) then
             Result := false;
         end
         else // for bfs()
- if (neurons[connections[i].n1] is TNeuron) then
-          if (neurons[connections[i].n1].isCalculated = false) then
+ if (neurons[connections[i]._from] is TNeuron) then
+          if (neurons[connections[i]._from].isCalculated = false) then
             Result := false;
     end;
   end;
@@ -98,16 +98,16 @@ begin
   result := 0;
   for i := 0 to conCount - 1 do
   begin
-    if self.index = connections[i].n2 then
-      if neurons[connections[i].n1] is TNeuron then
+    if self.index = connections[i]._to then
+      if neurons[connections[i]._from] is TNeuron then
       begin
-        if neurons[connections[i].n1].isImportant = true and
-          neurons[connections[i].n1].isCalculated = true then
-          result := result + neurons[connections[i].n1].outputValue
+        if neurons[connections[i]._from].isImportant = true and
+          neurons[connections[i]._from].isCalculated = true then
+          result := result + neurons[connections[i]._from].outputValue
             * connections[i].weight;
       end
       else  // if <> TNeuron
-        result := result + neurons[connections[i].n1].outputValue
+        result := result + neurons[connections[i]._from].outputValue
           * connections[i].weight;
   end;
 

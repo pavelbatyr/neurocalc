@@ -140,7 +140,7 @@ begin
   begin
     thisNeuron := queue.Extract;
     for i := 0 to conCount - 1 do
-      if connections[i].n2 = thisNeuron.index then
+      if connections[i]._to = thisNeuron.index then
       begin
 
         if checkNotInTheSequenceYet(thisNeuron.index) = true and
@@ -148,7 +148,7 @@ begin
           addToSequence(thisNeuron.index);
 
         thisNeuron.isImportant := true;
-        queue.Enqueue(neurons[connections[i].n1]);
+        queue.Enqueue(neurons[connections[i]._from]);
       end;
   end;
   queue.Free;
@@ -162,16 +162,16 @@ begin
   for i := 0 to activOrderIndex - 1 do
     for j := 0 to conCount - 1 do
       // this neuron is beginning of a connection
-      if (neuronsActivationOrder[i] = connections[j].n1) and
+      if (neuronsActivationOrder[i] = connections[j]._from) and
       // this neuron is already calculated
         (neurons[neuronsActivationOrder[i]].isCalculated = true) and
       // neuron on the end of this connection is not yet added to the list
-        (checkNotInTheSequenceYet(connections[j].n2) = true) and
+        (checkNotInTheSequenceYet(connections[j]._to) = true) and
       // neuron on the end of this connection can be calculated
-        (neurons[connections[j].n2].checkIfCalculatable(false) =
+        (neurons[connections[j]._to].checkIfCalculatable(false) =
         true) then
       begin
-        addToSequence(connections[j].n2);
+        addToSequence(connections[j]._to);
         Result := true;
       end;
 end;
@@ -250,10 +250,10 @@ begin
   end;
 
   for i := 0 to conCount - 1 do
-    if (neurons[connections[i].n2] is TOutNeuron) then
+    if (neurons[connections[i]._to] is TOutNeuron) then
     begin
-      connections[i].nabla := learningRate * neurons[connections[i].n2].dEdz
-        * neurons[connections[i].n1].outputValue;
+      connections[i].nabla := learningRate * neurons[connections[i]._to].dEdz
+        * neurons[connections[i]._from].outputValue;
     end;
 end;
 
@@ -270,9 +270,9 @@ begin
     begin
 
       for j := 0 to conCount - 1 do
-        if thisNeuron.index = connections[j].n1 then
+        if thisNeuron.index = connections[j]._from then
           thisNeuron.dEdz := thisNeuron.dEdz + neurons[connections
-            [j].n2].dEdz * connections[j].weight;
+            [j]._to].dEdz * connections[j].weight;
 
             // Multiply on derivative of activation function
       thisNeuron.dEdz := thisNeuron.dEdz * thisNeuron.derivativeOfSigmoid
@@ -282,10 +282,10 @@ begin
 
         // update weights
       for k := 0 to conCount - 1 do
-        if thisNeuron.index = connections[k].n2 then
+        if thisNeuron.index = connections[k]._to then
         begin
           connections[k].nabla := connections[k].nabla +
-            thisNeuron.dEdz * learningRate * neurons[connections[k].n1].outputValue;
+            thisNeuron.dEdz * learningRate * neurons[connections[k]._from].outputValue;
         end;
     end;
   end;
@@ -316,13 +316,13 @@ var
 begin
   Writeln(logFile, 'outer neurons:');
   for i := 0 to conCount - 1 do
-    if (neurons[connections[i].n2] is TOutNeuron) then
+    if (neurons[connections[i]._to] is TOutNeuron) then
       Write(logFile, FloatToStrf(connections[i].weight -
         connections[i].nabla, ffFixed, 5, 5) + ' ');
   Writeln(logFile, slinebreak);
   Writeln(logFile, 'neurons of hidden layers:');
   for i := 0 to conCount - 1 do
-    if (neurons[connections[i].n2] is TNeuron) then
+    if (neurons[connections[i]._to] is TNeuron) then
       Write(logFile, FloatToStrf(connections[i].weight -
         connections[i].nabla, ffFixed, 5, 5) + ' ');
   Writeln(logFile, slinebreak);
